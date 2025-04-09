@@ -1,4 +1,4 @@
-package concurrentEntitiesScheduler.scheduling.forever;
+package concurrentEntitiesScheduler.scheduling.stopcondition;
 
 import concurrentEntitiesScheduler.scheduling.Behavior;
 

@@ -1,4 +1,4 @@
-package concurrentEntitiesScheduler.scheduling.forever.fair;
+package concurrentEntitiesScheduler.scheduling.fair;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,9 +11,7 @@ import java.util.concurrent.Future;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import concurrentEntitiesScheduler.scheduling.forever.StoppingBehavior;
-import concurrentEntitiesScheduler.scheduling.forever.UntilStopScheduler;
-import concurrentEntitiesScheduler.scheduling.forever.UntilStopScheduler.TenSteps;
+import concurrentEntitiesScheduler.scheduling.stopcondition.StoppingBehavior;
 
 public class FairScheduler {
 
@@ -47,45 +45,6 @@ public class FairScheduler {
 //												.collect(Collectors.filtering(beh->beh!=null, Collectors.toList()));
 		queue = new ConcurrentLinkedQueue<>(nextQueue);
 		if (!queue.isEmpty()) startCycles();
-	}
-	
-	public class TenSteps implements StoppingBehavior {
-
-		private int maxCount;
-		private int count = 0;
-		private String name;
-		
-		public TenSteps(String name, int maxCount) {
-			this.name = name;
-			this.maxCount = maxCount;
-		}
-
-		@Override
-		public void step() {
-			System.out.println(name + " : "+(++count) + " step(s)");
-		}
-
-		@Override
-		public boolean wantsToStop() {
-			return (count == maxCount);
-		}
-
-	}
-
-	public static void main(String[] args) {
-		FairScheduler sched = new FairScheduler();
-
-		sched.manage(sched.new TenSteps("One",10));
-		sched.manage(sched.new TenSteps("Two",10));
-		sched.manage(sched.new TenSteps("Three",10));
-		sched.startCycles();
-		
-//		for(int i=0; i<2;i++) {
-//			TenSteps beh = sched.new TenSteps("Beh"+i,i);
-//			sched.manage(beh);
-//		}
-//		sched.startCycles();
-
 	}
 
 	

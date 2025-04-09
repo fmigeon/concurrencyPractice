@@ -4,8 +4,8 @@ import asynchronousMessaging.Message;
 import asynchronousMessaging.receiving.queueing.AsynchronousQueueingReceiver;
 import asynchronousMessaging.receiving.queueing.MessagePassingComponent;
 import asynchronousMessaging.sending.MessageSender;
-import concurrentEntitiesScheduler.scheduling.forever.StoppingBehavior;
-import concurrentEntitiesScheduler.scheduling.forever.fair.FairScheduler;
+import concurrentEntitiesScheduler.scheduling.fair.FairScheduler;
+import concurrentEntitiesScheduler.scheduling.stopcondition.StoppingBehavior;
 
 public class ConcurrenCommunicatingCountingEntities {
 
@@ -125,7 +125,7 @@ public class ConcurrenCommunicatingCountingEntities {
 			currentValue -= SLICE;
 		}
 		
-		// L'ordre de demande de management a une influence sur l'ordre des message : BAD  !!!
+		// L'ordre de demande de management a une influence sur l'ordre des messages : BAD  !!!
 		for(NoNeighbourCommunicatingAndCountingEntity entity : chain) {
 			scheduler.manage(entity.getBehavior());
 		}

@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import asynchronousMessaging.Message;
-import concurrentEntitiesScheduler.scheduling.forever.StoppingBehavior;
+import concurrentEntitiesScheduler.scheduling.stopcondition.StoppingBehavior;
 
 public class MessagePassingComponent<Msg extends Message> {
 	private AsynchronousQueueingReceiver<Msg> receiverComponent = new AsynchronousQueueingReceiver<>();

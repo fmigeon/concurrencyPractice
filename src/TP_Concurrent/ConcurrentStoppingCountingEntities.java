@@ -2,12 +2,12 @@ package TP_Concurrent;
 
 import java.util.stream.IntStream;
 
-import concurrentEntitiesScheduler.scheduling.forever.StoppingBehavior;
-import concurrentEntitiesScheduler.scheduling.forever.UntilStopScheduler;
+import concurrentEntitiesScheduler.scheduling.stopcondition.StoppingBehavior;
+import concurrentEntitiesScheduler.scheduling.stopcondition.UntilStopScheduler;
 
 public class ConcurrentStoppingCountingEntities {
 
-	private static class CountingEntity {
+	public static class CountingEntity {
 		private int count = 0;
 		private String name = "Agent";
 		private StoppingBehavior behavior = new StoppingBehavior() {
@@ -22,10 +22,10 @@ public class ConcurrentStoppingCountingEntities {
 			}
 			
 		};
-		private CountingEntity(String suffix) {
+		public CountingEntity(String suffix) {
 			name+=suffix;
 		}
-		private StoppingBehavior getBehavior() {return behavior;}
+		public StoppingBehavior getBehavior() {return behavior;}
 	}
 	
 	public static void main(String[] args) {
