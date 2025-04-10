@@ -29,8 +29,8 @@ public class ConcurrenCommunicatingCountingEntities {
 		}
 
 		protected boolean wantToStop() {
-			return count != 0;
-//			return (count >= upperBound);
+//			return count != 0;
+			return (count >= upperBound);
 		}
 
 		protected void doTreatMessage(IntMessage message) {
@@ -40,7 +40,7 @@ public class ConcurrenCommunicatingCountingEntities {
 
 		protected void doStep() {
 			if (count != 0) {
-				System.out.println(name + " is finally counting : " + count++);
+				System.out.println(name + " is counting : " + count++);
 				if (count == upperBound) {
 					System.out.println(name + " : I'm done !");
 				}
@@ -69,19 +69,16 @@ public class ConcurrenCommunicatingCountingEntities {
 		}
 
 		protected void doStep() {
-			System.out.println(name + " : Sending message " + (upperBound + SLICE) + " to neighbour " + neighbour);
-			send(new IntMessage(upperBound + SLICE), neighbour);
-			fib(40);
+//			System.out.println(name + " : Sending message " + (upperBound + SLICE) + " to neighbour " + neighbour);
+//			send(new IntMessage(upperBound + SLICE), neighbour);
+//			fib(40);
 
-//			if (count != 0) {
-//				System.out.println(name + " is counting : " + count++);
-//				if (count == upperBound) {
-//					send(new IntMessage(upperBound + SLICE), neighbour);
-//				}
-//			} else {
-//				System.out.println(name + " has count " + count + " and is waiting message");
-//				fib(30);
-//			}
+			if (count != 0) {
+				System.out.println(name + " is counting : " + count++);
+				if (count == upperBound) {
+					send(new IntMessage(upperBound + 1), neighbour);
+				}
+			}
 		}
 	}
 
@@ -110,26 +107,28 @@ public class ConcurrenCommunicatingCountingEntities {
 	public static void main(String[] args) {
 		System.out.println("Starting at " + System.currentTimeMillis());
 		FairScheduler scheduler = new FairScheduler();
-		NoNeighbourCommunicatingAndCountingEntity chain[] = new NoNeighbourCommunicatingAndCountingEntity[UPPER_BOUND/SLICE + 1];
-		int index =chain.length -1;
+		NoNeighbourCommunicatingAndCountingEntity chain[] = new NoNeighbourCommunicatingAndCountingEntity[UPPER_BOUND
+				/ SLICE + 1];
+		int index = chain.length - 1;
 
 		int currentValue = UPPER_BOUND;
-		chain[index--]  = new NoNeighbourCommunicatingAndCountingEntity(currentValue, "last");
-		System.out.println("Last entity creation : " + chain[index+1].getID());
+		chain[index--] = new NoNeighbourCommunicatingAndCountingEntity(currentValue, "last");
+		System.out.println("Last entity creation : " + chain[index + 1].getID());
 
 		currentValue -= SLICE;
 		while (currentValue >= 0) {
-			chain[index] = new CommunicatingCountingEntity(currentValue, "_" + currentValue, chain[index+1].getID());
+			chain[index] = new CommunicatingCountingEntity(currentValue, "_" + currentValue, chain[index + 1].getID());
 			System.out.println("Entity creation : " + chain[index].getID());
 			index--;
 			currentValue -= SLICE;
 		}
-		
-		// L'ordre de demande de management a une influence sur l'ordre des messages : BAD  !!!
-		for(NoNeighbourCommunicatingAndCountingEntity entity : chain) {
+
+		// L'ordre de demande de management a une influence sur l'ordre des messages :
+		// BAD !!!
+		for (NoNeighbourCommunicatingAndCountingEntity entity : chain) {
 			scheduler.manage(entity.getBehavior());
 		}
-		
+
 		MessageSender<IntMessage> sender = new MessageSender<IntMessage>() {
 		};
 		sender.send(new IntMessage(1), chain[0].getID());

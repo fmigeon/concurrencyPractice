@@ -10,7 +10,7 @@ public class Exo1 {
 	
 	public static class Counting {
 		
-		public void submit(int n) {
+		public void process(int n) {
 			Runnable task = () -> {
 				System.out.println("Demarrage de la tache");
 				int sum = IntStream.range(1,n+1).sum();
@@ -22,6 +22,6 @@ public class Exo1 {
 	
 	public static void main(String[] args) {
 		Counting c = new Counting();
-		c.submit(1000);
+		c.process(1000);
 	}
 }
